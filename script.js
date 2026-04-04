@@ -1,0 +1,258 @@
+// script.js
+const Game2048 = () => {
+  const [grid, setGrid] = React.useState([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
+  const [score, setScore] = React.useState(0);
+
+  React.useEffect(() => {
+    addNewTile();
+    addNewTile();
+  }, []);
+
+  const addNewTile = () => {
+    const newGrid = [...grid];
+    const emptyTiles = [];
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        if (newGrid[i][j] === 0) {
+          emptyTiles.push([i, j]);
+        }
+      }
+    }
+    if (emptyTiles.length > 0) {
+      const randomIndex = Math.floor(Math.random() * emptyTiles.length);
+      const [x, y] = emptyTiles[randomIndex];
+      newGrid[x][y] = Math.random() < 0.9 ? 2 : 4;
+      setGrid(newGrid);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    switch (e.key) {
+      case 'ArrowUp':
+        moveUp();
+        break;
+      case 'ArrowDown':
+        moveDown();
+        break;
+      case 'ArrowLeft':
+        moveLeft();
+        break;
+      case 'ArrowRight':
+        moveRight();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const moveUp = () => {
+    const newGrid = [...grid];
+    for (let j = 0; j < 4; j++) {
+      let column = [];
+      for (let i = 0; i < 4; i++) {
+        if (newGrid[i][j] !== 0) {
+          column.push(newGrid[i][j]);
+        }
+      }
+      let mergedColumn = [];
+      for (let i = 0; i < column.length; i++) {
+        if (i < column.length - 1 && column[i] === column[i + 1]) {
+          mergedColumn.push(column[i] * 2);
+          setScore((prevScore) => prevScore + column[i] * 2);
+          i++;
+        } else {
+          mergedColumn.push(column[i]);
+        }
+      }
+      while (mergedColumn.length < 4) {
+        mergedColumn.push(0);
+      }
+      for (let i = 0; i < 4; i++) {
+        newGrid[i][j] = mergedColumn[i];
+      }
+    }
+    setGrid(newGrid);
+    addNewTile();
+  };
+
+  const moveDown = () => {
+    const newGrid = [...grid];
+    for (let j = 0; j < 4; j++) {
+      let column = [];
+      for (let i = 3; i >= 0; i--) {
+        if (newGrid[i][j] !== 0) {
+          column.push(newGrid[i][j]);
+        }
+      }
+      let mergedColumn = [];
+      for (let i = 0; i < column.length; i++) {
+        if (i < column.length - 1 && column[i] === column[i + 1]) {
+          mergedColumn.push(column[i] * 2);
+          setScore((prevScore) => prevScore + column[i] * 2);
+          i++;
+        } else {
+          mergedColumn.push(column[i]);
+        }
+      }
+      while (mergedColumn.length < 4) {
+        mergedColumn.push(0);
+      }
+      for (let i = 3; i >= 0; i--) {
+        newGrid[i][j] = mergedColumn[3 - i];
+      }
+    }
+    setGrid(newGrid);
+    addNewTile();
+  };
+
+  const moveLeft = () => {
+    const newGrid = [...grid];
+    for (let i = 0; i < 4; i++) {
+      let row = [];
+      for (let j = 0; j < 4; j++) {
+        if (newGrid[i][j] !== 0) {
+          row.push(newGrid[i][j]);
+        }
+      }
+      let mergedRow = [];
+      for (let j = 0; j < row.length; j++) {
+        if (j < row.length - 1 && row[j] === row[j + 1]) {
+          mergedRow.push(row[j] * 2);
+          setScore((prevScore) => prevScore + row[j] * 2);
+          j++;
+        } else {
+          mergedRow.push(row[j]);
+        }
+      }
+      while (mergedRow.length < 4) {
+        mergedRow.push(0);
+      }
+      for (let j = 0; j < 4; j++) {
+        newGrid[i][j] = mergedRow[j];
+      }
+    }
+    setGrid(newGrid);
+    addNewTile();
+  };
+
+  const moveRight = () => {
+    const newGrid = [...grid];
+    for (let i = 0; i < 4; i++) {
+      let row = [];
+      for (let j = 3; j >= 0; j--) {
+        if (newGrid[i][j] !== 0) {
+          row.push(newGrid[i][j]);
+        }
+      }
+      let mergedRow = [];
+      for (let j = 0; j < row.length; j++) {
+        if (j < row.length - 1 && row[j] === row[j + 1]) {
+          mergedRow.push(row[j] * 2);
+          setScore((prevScore) => prevScore + row[j] * 2);
+          j++;
+        } else {
+          mergedRow.push(row[j]);
+        }
+      }
+      while (mergedRow.length < 4) {
+        mergedRow.push(0);
+      }
+      for (let j = 3; j >= 0; j--) {
+        newGrid[i][j] = mergedRow[3 - j];
+      }
+    }
+    setGrid(newGrid);
+    addNewTile();
+  };
+
+  const styles = {
+    gameContainer: {
+      width: '400px',
+      margin: '40px auto',
+      textAlign: 'center',
+    },
+    score: {
+      fontSize: '24px',
+      marginBottom: '20px',
+    },
+    grid: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    row: {
+      display: 'flex',
+    },
+    cell: {
+      width: '80px',
+      height: '80px',
+      margin: '5px',
+      backgroundColor: '#ccc',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: '24px',
+      fontWeight: 'bold',
+      borderRadius: '10px',
+    },
+  };
+
+  return (
+    <div style={styles.gameContainer} onKeyDown={handleKeyDown} tabIndex="0">
+      <h1>2048</h1>
+      <div style={styles.score}>Score: {score}</div>
+      <div style={styles.grid}>
+        {grid.map((row, i) => (
+          <div key={i} style={styles.row}>
+            {row.map((cell, j) => (
+              <div
+                key={j}
+                style={{
+                  ...styles.cell,
+                  backgroundColor:
+                    cell === 2
+                      ? '#eee'
+                      : cell === 4
+                      ? '#eec'
+                      : cell === 8
+                      ? '#faa'
+                      : cell === 16
+                      ? '#f66'
+                      : cell === 32
+                      ? '#f33'
+                      : cell === 64
+                      ? '#f00'
+                      : cell === 128
+                      ? '#fa0'
+                      : cell === 256
+                      ? '#fc0'
+                      : cell === 512
+                      ? '#ff0'
+                      : cell === 1024
+                      ? '#0f0'
+                      : cell === 2048
+                      ? '#0ff'
+                      : '#ccc',
+                }}
+              >
+                {cell !== 0 ? cell : ''}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Game2048 />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
