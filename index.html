@@ -4,12 +4,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game 2048</title>
+  <title>2048</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #faf8ef;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+  </style>
 </head>
 <body>
   <div id="root"></div>
-  <script src="https:                                                        
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-  <script src="script.js"></script>
+
+  <!-- Use production builds: smaller, faster, no dev warnings overhead -->
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"
+          crossorigin
+          defer></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+          crossorigin
+          defer></script>
+
+  <!-- Babel for JSX transform — only needed if script.js uses JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+
+  <script type="text/babel" src="script.js" defer></script>
 </body>
 </html>
